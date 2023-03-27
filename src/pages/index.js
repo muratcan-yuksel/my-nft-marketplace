@@ -33,26 +33,32 @@ const Index = () => {
     }
   };
 
-  const disconnectWallet = () => {
-    setProvider(null);
+  const disconnectWallet = async () => {
+    try {
+      // Disconnect the wallet provider
+      await web3ModalRef.current.clearCachedProvider();
+      // Reset the provider state to null
+      setProvider(null);
+      // Set the walletConnected state to false
+      setWalletConnected(false);
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   useEffect(() => {
-    web3ModalRef.current = new Web3Modal({
-      network: "mumbai",
-      cacheProvider: true,
-      providerOptions: {},
-      disableInjectedProvider: false,
-    });
+    if (!walletConnected) {
+      web3ModalRef.current = new Web3Modal({
+        network: "mumbai",
+        cacheProvider: true,
+        providerOptions: {},
+        disableInjectedProvider: false,
+      });
+      connectWallet();
+    }
   }, [walletConnected]);
 
-  const walletButton = provider ? (
-    <button onClick={disconnectWallet}>Disconnect</button>
-  ) : (
-    <button onClick={connectWallet}>Connect Wallet</button>
-  );
-
-  return <div>{walletButton}</div>;
+  return <div>hey</div>;
 };
 
 export default Index;
