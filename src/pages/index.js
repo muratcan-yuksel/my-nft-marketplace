@@ -1,6 +1,7 @@
 import { ethers, providers } from "ethers";
 import { useState, useEffect, useRef } from "react";
 import Web3Modal from "web3modal";
+const { address, abi } = require("../Marketplace.json");
 
 const Index = () => {
   const [provider, setProvider] = useState(null);
@@ -33,18 +34,12 @@ const Index = () => {
     }
   };
 
-  const disconnectWallet = async () => {
-    try {
-      // Disconnect the wallet provider
-      await web3ModalRef.current.clearCachedProvider();
-      // Reset the provider state to null
-      setProvider(null);
-      // Set the walletConnected state to false
-      setWalletConnected(false);
-    } catch (err) {
-      console.error(err);
-    }
-  };
+  // const getAllNFTs = async () => {
+  //   const provider = await getProviderOrSigner();
+  //   const contract = new ethers.Contract(address, abi, provider);
+  //   const allNFTs = await contract.getAllNFTs();
+  //   console.log(allNFTs);
+  // };
 
   useEffect(() => {
     if (!walletConnected) {
@@ -58,7 +53,7 @@ const Index = () => {
     }
   }, [walletConnected]);
 
-  return <div>hey</div>;
+  return <div>home</div>;
 };
 
 export default Index;
