@@ -14,17 +14,14 @@ const createNFT = () => {
 
   //this function uploads the NFT image to IPFS
   const onChangeFile = async (e) => {
-    var file = e.target.files[0];
-    //check for file extension
+    const file = e.target.files[0];
     try {
-      //upload the file to IPFS
-      const response = await uploadFileToIPFS(file);
-      if (response.success === true) {
-        console.log("Uploaded image to Pinata: ", response.pinataURL);
-        setFileURL(response.pinataURL);
+      const result = await uploadFileToIPFS(file);
+      if (result.success) {
+        setFileURL(result.pinataURL);
       }
-    } catch (e) {
-      console.log("Error during file upload", e);
+    } catch (error) {
+      console.log(error);
     }
   };
 

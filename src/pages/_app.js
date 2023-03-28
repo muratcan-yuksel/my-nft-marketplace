@@ -1,17 +1,10 @@
 import "@/styles/globals.css";
-import Link from "next/link";
+import NavBar from "../components/NavBar";
 
 export default function App({ Component, pageProps }) {
   return (
     <>
-      <nav className="flex justify-around">
-        <Link href="/">
-          <p>Home</p>
-        </Link>
-        <Link href="/createNFT">
-          <p>Create NFT</p>
-        </Link>
-      </nav>
+      <NavBar />
       <Component {...pageProps} />
     </>
   );
