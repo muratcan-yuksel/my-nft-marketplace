@@ -34,12 +34,20 @@ const Index = () => {
     }
   };
 
-  // const getAllNFTs = async () => {
-  //   const provider = await getProviderOrSigner();
-  //   const contract = new ethers.Contract(address, abi, provider);
-  //   const allNFTs = await contract.getAllNFTs();
-  //   console.log(allNFTs);
-  // };
+  const getAllNFTs = async () => {
+    const signer = await getProviderOrSigner(true);
+    const contract = new ethers.Contract(address, abi, signer);
+    const transaction = await contract.getAllNFTs();
+    console.log(transaction);
+
+    const items = await transaction.map(async (item) => {
+      const tokenURI = await contract.tokenURI(item.tokenId);
+      const metadata = await fetch(tokenURI).then((res) => res.json());
+      let price = ethers.utils.formatUnits(item.price.toString(), "ether");
+      return { ...metadata, price };
+    });
+    await console.log(items);
+  };
 
   useEffect(() => {
     if (!walletConnected) {
@@ -51,6 +59,7 @@ const Index = () => {
       });
       connectWallet();
     }
+    getAllNFTs();
   }, [walletConnected]);
 
   return <div>home</div>;
