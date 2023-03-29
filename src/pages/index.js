@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import { ethers, utils } from "ethers";
 import { address, abi } from "../Marketplace.json";
 import { DataContext } from "../components/dataProvider";
+import axios from "axios";
 
 function MyComponent() {
   const [selectedAddress, setSelectedAddress] = useState(null);
@@ -21,19 +22,26 @@ function MyComponent() {
       setResult(result);
       console.log("result", result);
       //console log in human readable format
-      console.log(
-        "result",
-        result.map((item) => {
-          return {
-            owner: item.owner,
-            price: utils.formatEther(item.price),
-            seller: item.seller,
-            currentlyListed: item.currentlyListed,
-            //parse big number but not ether, it's id
-            tokenId: item.tokenId.toNumber(),
+      const items = await Promise.all(
+        result.map(async (i) => {
+          const tokenURI = await contract.tokenURI(i.tokenId);
+          let meta = await axios.get(tokenURI);
+          meta = meta.data;
+
+          let price = ethers.utils.formatUnits(i.price.toString(), "ether");
+          let item = {
+            price,
+            tokenId: i.tokenId.toNumber(),
+            seller: i.seller,
+            owner: i.owner,
+            image: meta.image,
+            name: meta.name,
+            description: meta.description,
           };
+          return item;
         })
       );
+      console.log("items", items);
     } catch (error) {
       console.error(error);
     }
