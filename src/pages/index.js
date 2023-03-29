@@ -3,6 +3,7 @@ import { ethers, utils } from "ethers";
 import { address, abi } from "../Marketplace.json";
 import { DataContext } from "../components/dataProvider";
 import axios from "axios";
+import NFTItem from "@/components/NFTItem";
 
 function MyComponent() {
   const [selectedAddress, setSelectedAddress] = useState(null);
@@ -10,6 +11,7 @@ function MyComponent() {
   const [contract, setContract] = useState(null);
   const [result, setResult] = useState(null);
   const [data, setData] = useContext(DataContext);
+  const [nftList, setNftList] = useState([]);
 
   const clicky = () => {
     console.log(data);
@@ -41,6 +43,7 @@ function MyComponent() {
           return item;
         })
       );
+      setNftList(items);
       console.log("items", items);
     } catch (error) {
       console.error(error);
@@ -59,6 +62,14 @@ function MyComponent() {
   return (
     <div>
       <button onClick={handleClick}>click</button>
+      {nftList &&
+        nftList.map((item) => {
+          return (
+            <div>
+              <NFTItem item={item} />
+            </div>
+          );
+        })}
     </div>
   );
 }
