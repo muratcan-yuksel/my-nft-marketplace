@@ -20,7 +20,7 @@
     "next": "13.2.4",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "wagmi": "^0.12.6",
+    "wagmi": "^0.12.7",
     "web3modal": "^1.9.12"
   },
   "devDependencies": {

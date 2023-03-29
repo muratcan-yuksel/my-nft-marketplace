@@ -28,11 +28,6 @@ const NavBar = () => {
                 My NFTs
               </p>
             </Link>
-            <Link href="/creatorDashboard">
-              <p className=" m-1    text-center md:mr-4 border border-[#03480f] p-1 rounded-lg  transition ease-in-out  hover:scale-110 hover:bg-[#d43680] hover:border-[#d43680]">
-                Creator Dashboard
-              </p>
-            </Link>
           </div>
           <div className="">
             <ConnectWallet />

@@ -1,63 +1,54 @@
 import { ethers, providers } from "ethers";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useContext } from "react";
 import Web3Modal from "web3modal";
 const { address, abi } = require("../Marketplace.json");
+import { DataContext } from "../components/dataProvider";
 
 const ConnectWallet = () => {
+  const [selectedAddress, setSelectedAddress] = useState(null);
   const [provider, setProvider] = useState(null);
+  const [contract, setContract] = useState(null);
+  const [result, setResult] = useState(null);
+  const [data, setData] = useContext(DataContext);
   const [walletConnected, setWalletConnected] = useState(false);
-  const web3ModalRef = useRef();
-  const [walletAddress, setWalletAddress] = useState("");
 
-  const getProviderOrSigner = async (needSigner = false) => {
-    const provider = await web3ModalRef.current.connect();
-    const web3Provider = new providers.Web3Provider(provider);
-    const { chainId } = await web3Provider.getNetwork();
-    const address = await web3Provider.getSigner().getAddress();
+  const connectToMetaMask = async () => {
+    // Check if MetaMask is installed
+    if (window.ethereum) {
+      try {
+        // Request permission to connect to MetaMask
+        const provider = new ethers.providers.Web3Provider(window.ethereum);
+        await provider.send("eth_requestAccounts", []);
+        setProvider(provider);
 
-    if (chainId !== 80001) {
-      window.alert("Please connect to Matic Mumbai Testnet");
-      throw new Error("Please connect to Matic Mumbai Testnet");
-    }
-    if (needSigner) {
-      const signer = web3Provider.getSigner();
-      return signer;
-    }
+        // Get the user's selected account address
+        const accounts = await provider.listAccounts();
+        setSelectedAddress(accounts[0]);
+        setWalletConnected(true);
 
-    console.log(address);
-    setWalletAddress(address);
+        // Set up contract instance using the address and ABI
+        const contract = new ethers.Contract(
+          address,
+          abi,
+          provider.getSigner()
+        );
+        setContract(contract);
 
-    return web3Provider;
-  };
-
-  const connectWallet = async () => {
-    try {
-      // Get the provider from web3Modal, which in our case is MetaMask
-      // When used for the first time, it prompts the user to connect their wallet
-      await getProviderOrSigner();
-      setWalletConnected(true);
-    } catch (err) {
-      console.error(err);
+        setData({ provider: provider, contract: contract });
+      } catch (error) {
+        console.error(error);
+      }
+    } else {
+      console.log("Please install MetaMask!");
     }
   };
-
-  useEffect(() => {
-    if (!walletConnected) {
-      web3ModalRef.current = new Web3Modal({
-        network: "mumbai",
-        cacheProvider: true,
-        providerOptions: {},
-        disableInjectedProvider: false,
-      });
-    }
-  }, [walletConnected]);
 
   const conditionalBtn = () => {
     if (walletConnected) {
       return (
         <div className="h-full w-full">
           <button className="mr-4 h-10 overflow-hidden w-44 border border-[#03480f] p-1 rounded-lg  transition ease-in-out  hover:scale-110 hover:bg-[#d43680] hover:border-[#d43680]">
-            {walletAddress}
+            {selectedAddress}
           </button>
         </div>
       );
@@ -66,7 +57,7 @@ const ConnectWallet = () => {
         <div className="h-full w-full">
           <button
             className="mr-4 h-10 w-44 border border-[#03480f] p-1 rounded-lg  transition ease-in-out  hover:scale-110 hover:bg-[#d43680] hover:border-[#d43680]"
-            onClick={connectWallet}
+            onClick={connectToMetaMask}
           >
             Connect Wallet
           </button>
