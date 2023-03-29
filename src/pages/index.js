@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import { ethers } from "ethers";
+import { ethers, utils } from "ethers";
 import { address, abi } from "../Marketplace.json";
 import { DataContext } from "../components/dataProvider";
 
@@ -20,6 +20,20 @@ function MyComponent() {
       const result = await data.contract.getAllNFTs();
       setResult(result);
       console.log("result", result);
+      //console log in human readable format
+      console.log(
+        "result",
+        result.map((item) => {
+          return {
+            owner: item.owner,
+            price: utils.formatEther(item.price),
+            seller: item.seller,
+            currentlyListed: item.currentlyListed,
+            //parse big number but not ether, it's id
+            tokenId: item.tokenId.toNumber(),
+          };
+        })
+      );
     } catch (error) {
       console.error(error);
     }
