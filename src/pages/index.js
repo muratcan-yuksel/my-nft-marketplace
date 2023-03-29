@@ -12,10 +12,7 @@ function MyComponent() {
   const [result, setResult] = useState(null);
   const [data, setData] = useContext(DataContext);
   const [nftList, setNftList] = useState([]);
-
-  const clicky = () => {
-    console.log(data);
-  };
+  const [count, setCount] = useState(0);
 
   const handleClick = async () => {
     try {
@@ -49,27 +46,35 @@ function MyComponent() {
       console.error(error);
     }
   };
-
   useEffect(() => {
     if (data) {
       setProvider(data.provider);
       setContract(data.contract);
-      handleClick();
     }
     console.log("data", data);
+    setCount(count + 1);
   }, [data]);
 
+  useEffect(() => {
+    handleClick();
+  }, [count]);
+
   return (
-    <div>
-      <button onClick={handleClick}>click</button>
-      {nftList &&
-        nftList.map((item) => {
-          return (
-            <div>
-              <NFTItem item={item} />
-            </div>
-          );
-        })}
+    <div className="bg-black h-screen text-white flex flex-col justify-start items-start">
+      <button className="w-screen " onClick={handleClick}>
+        List NFTs
+      </button>
+      <div className="flex flex-wrap ">
+        {" "}
+        {nftList &&
+          nftList.map((item) => {
+            return (
+              <div className="">
+                <NFTItem item={item} />
+              </div>
+            );
+          })}
+      </div>
     </div>
   );
 }
