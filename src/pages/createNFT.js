@@ -58,7 +58,7 @@ const createNFT = () => {
         //create the NFT on the blockchain
         const provider = new providers.Web3Provider(window.ethereum);
         const signer = provider.getSigner();
-        updateMessage("Please wait.. uploading (upto 5 mins)");
+        updateMessage("Please wait.. uploading (up to 5 mins)");
         const contract = new ethers.Contract(address, abi, signer);
         const price = ethers.utils.parseUnits(formParams.price, "ether");
         let listingPrice = await contract.getListPrice();
@@ -80,15 +80,15 @@ const createNFT = () => {
   };
 
   return (
-    <div>
-      <div className="flex flex-col place-items-center mt-10" id="nftForm">
-        <form className="bg-white shadow-md rounded px-8 pt-4 pb-8 mb-4">
-          <h3 className="text-center font-bold text-purple-500 mb-8">
+    <div className="h-screen bg-black text-white ">
+      <div className=" flex flex-col place-items-center " id="nftForm">
+        <form className=" shadow-md rounded px-8 pt-4 pb-8 mb-4">
+          <h3 className="text-center font-bold text-[#d43680] mb-8">
             Upload your NFT to the marketplace
           </h3>
           <div className="mb-4">
             <label
-              className="block text-purple-500 text-sm font-bold mb-2"
+              className="block text-[#d43680] text-sm font-bold mb-2"
               htmlFor="name"
             >
               NFT Name
@@ -106,7 +106,7 @@ const createNFT = () => {
           </div>
           <div className="mb-6">
             <label
-              className="block text-purple-500 text-sm font-bold mb-2"
+              className="block text-[#d43680] text-sm font-bold mb-2"
               htmlFor="description"
             >
               NFT Description
@@ -126,7 +126,7 @@ const createNFT = () => {
           </div>
           <div className="mb-6">
             <label
-              className="block text-purple-500 text-sm font-bold mb-2"
+              className="block text-[#d43680] text-sm font-bold mb-2"
               htmlFor="price"
             >
               Price (in ETH)
@@ -144,7 +144,7 @@ const createNFT = () => {
           </div>
           <div>
             <label
-              className="block text-purple-500 text-sm font-bold mb-2"
+              className="block text-[#d43680] text-sm font-bold mb-2"
               htmlFor="image"
             >
               Upload Image
@@ -155,7 +155,7 @@ const createNFT = () => {
           <div className="text-green text-center">{message}</div>
           <button
             onClick={listNFT}
-            className="font-bold mt-10 w-full bg-purple-500 text-white rounded p-2 shadow-lg"
+            className="font-bold mt-10 w-full bg-[#d43680] text-white rounded p-2 shadow-lg"
           >
             List NFT
           </button>

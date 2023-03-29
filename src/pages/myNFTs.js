@@ -17,7 +17,7 @@ function MyComponent() {
   const handleClick = async () => {
     try {
       // Call the contract function
-      const result = await data.contract.getAllNFTs();
+      const result = await data.contract.getMyNFTs();
       setResult(result);
       console.log("result", result);
       //console log in human readable format
